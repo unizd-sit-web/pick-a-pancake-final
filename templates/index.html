@@ -1,0 +1,68 @@
+{% extends 'home.html' %}
+
+{% block content %}
+    <section class="container-fluid px-0">
+        <div class="row align-items-center content">
+            <div class="col-md-6 text-center">
+                <div class="row justify-content-center">
+                    <div class="col-10 col-lg-8 blurb mb-5 mb-md-0">
+                        <h2>PICK A PANCAKE</h2>
+                        <p class="lead">Craving something sweet, but you don't feel like leaving the warmth of your home? Order the perfect pancakes quickly and easily.</p>
+
+                        <a href="{{ url_for('shop') }}" class="button">place an order</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <img src='https://i.postimg.cc/ht24TNn2/pancake1.jpg' alt='pancake' class="img-fluid">
+            </div>
+        </div>
+
+        <div class="row align-items-center content">
+            <div class="col-md-6 order-2 order-md-1">
+                <img src='https://i.postimg.cc/650BxF8B/pancake2.jpg' alt='pancake2' class="img-fluid">
+            </div>
+            <div class="col-md-6 text-center order-1 order-md-2">
+                <div class="row justify-content-center">
+                    <div class="col-10 col-lg-8 blurb mb-5 mb-md-0">
+                        <h2>RESERVATIONS</h2>
+                        <p class="lead">Looking for a perfect place for the first date, birthday celebration, or even anniversary? Look no more! Be assured that your table will be ready for your big day!</p>
+                        <a href="{{ url_for('reservation') }}" class="button">make a reservation</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row align-items-center content">
+            <div class="col-md-6 text-center">
+                <div class="row justify-content-center">
+                    <div class="col-10 col-lg-8 blurb mb-5 mb-md-0">
+                        <h2>NEWSLETTER</h2>
+                        <p class="lead">
+                            Don't miss out on special discounts and events!
+                        </p>
+
+                        <form action="/action_page.php">
+                            <div class="newsletter">
+                                <input type="text" placeholder="Name" name="name" required>
+                                <input type="text" placeholder="E-mail address" name="mail" required>
+                            </div>
+
+                            <div class="newsletter">
+                                <input type="submit" value="subscribe">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <img src='https://i.postimg.cc/C1kVP2yT/pancake3.jpg' alt='pancake3' class="img-fluid">
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>
+
+{% endblock %}
