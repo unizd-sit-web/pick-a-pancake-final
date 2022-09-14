@@ -1,34 +1,27 @@
-
-from turtle import title
-from flask import Flask, render_template 
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
-@app.route('/', methods=['get'])
+@app.route('/')
+@app.route("/index/")
 def index():
-    title = "Pick a Pancake"
-    return render_template('index.html', title=title)
-
-@app.route('/index.html/')
-def redir():
-    return redirect('/')
+    return render_template("index.html")
 
 @app.route('/about/')
 def about():
-    title = "About us"
-    return render_template('about.html', title=title)
+    return render_template('about.html')
 
-@app.route('/menu/')
-def menu():
-    title = "Menu"
-    return render_template('menu.html', title=title)
+@app.route('/meni/')
+def meni():
+    return render_template('meni.html')
 
 @app.route('/reservation/')
 def reservation():
-    title = "Reservation"
-    return render_template('reservation.html', title=title)
+    return render_template('reservation.html')
 
 @app.route('/shop/')
 def shop():
-    title = "Shop"
-    return render_template('shop.html', title=title)
+    return render_template('shop.html')
+
+if __name__ == "__main__":
+    app.run(debug=True)
