@@ -1,12 +1,8 @@
 
 from turtle import title
 from flask import Flask, render_template 
-from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
-bootstrap = Bootstrap(app)
-app.config['SECRET_KEY'] = 'pan cake'
-
 
 @app.route('/', methods=['get'])
 def index():
