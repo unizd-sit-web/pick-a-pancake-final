@@ -7,9 +7,9 @@
                 <div class="row justify-content-center">
                     <div class="col-10 col-lg-8 blurb mb-5 mb-md-0">
                         <h2>PICK A PANCAKE</h2>
-                        <p class="lead">Craving something sweet, but you don't feel like leaving the warmth of your home? Order the perfect pancakes quickly and easily.</p>
+                        <p class="lead">Craving something sweet? Pick a pancake that best suits you.</p>
 
-                        <a href="{{ url_for('shop') }}" class="button">place an order</a>
+                        <a href="{{ url_for('shop') }}" class="button">pick and choose</a>
                     </div>
                 </div>
             </div>
@@ -26,7 +26,7 @@
                 <div class="row justify-content-center">
                     <div class="col-10 col-lg-8 blurb mb-5 mb-md-0">
                         <h2>RESERVATIONS</h2>
-                        <p class="lead">Looking for a perfect place for the first date, birthday celebration, or even anniversary? Look no more! Be assured that your table will be ready for your big day!</p>
+                        <p class="lead">Looking for a perfect place for the first date, birthday celebration, anniversary or even a casual day out? Look no more! Be assured that your table will be ready for you!</p>
                         <a href="{{ url_for('reservation') }}" class="button">make a reservation</a>
                     </div>
                 </div>
@@ -42,10 +42,10 @@
                             Don't miss out on special discounts and events!
                         </p>
 
-                        <form action="/action_page.php">
+                        <form action="/form" method="POST">
                             <div class="newsletter">
-                                <input type="text" placeholder="Name" name="name" required>
-                                <input type="text" placeholder="E-mail address" name="mail" required>
+                                <input type="text" placeholder="First Name" name="first_name" required>
+                                <input type="text" placeholder="Email Address" name="email" required>
                             </div>
 
                             <div class="newsletter">
