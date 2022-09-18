@@ -4,11 +4,13 @@ from flask import Flask,render_template, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from flask_mail import Mail, Message
+from email.message import Message
 
 
 app = Flask(__name__)
 
+#osposobljavanje baze 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///reservation.db'
 #secret key
 app.config['SECRET_KEY'] = "secret key"
@@ -34,8 +36,7 @@ def table_reservation():
     unique=False
     return render_template("reservation.html")
 
-
-    
+#rute
 @app.route('/')
 @app.route("/index/")
 def index():
@@ -57,19 +58,34 @@ def reservation():
 def shop():
     return render_template('shop.html')
 
-@app.route('/form/', methods=["POST"])
+'''@app.route('/form/', methods=["POST"])
 def form():
     first_name = request.form.get("first_name")
     email = request.form.get("email")
-    return render_template ('form.html')
+    return render_template ('form.html')'''
+
+#slanje emaila nakon prijave na newsletter
+@app.route("/index", methods=["POST"])
+def send_message_from_index_page():
+    name = request.form.get("first_name")
+    email = request.form.get("email")
+    email_name=Message("Newsletter subscription", sender=email, recipients=["babicdaria1@gmail.com"])
+    email_name.body=("Thank you for subscribing to our newsletter. By subscribing, You will be receiving discount codes and updates about our special events.")
+    
+    email.send(email_name)
+    success_statement="Thank you!"
+    return render_template("index.html", success_statement=success_statement)
+    
+app.testing=False 
 
 @app.route('/reservedform/', methods=["POST"])
 def reservedform():
-    first_name = request.form.get("name")
-    surename = request.form.get ("surename")
-    quantitiy = request.form.get ("quantity")
-    email = request.form.get("email")
+    first_name = request.form.get("Name")
+    surname = request.form.get ("Surname")
+    quantitiy = request.form.get ("Number of people")
+    email = request.form.get("E-mail")
     return render_template ('reservedform.html')
+    submit = SubmitField("submit")
 
 
 if __name__ == "__main__":
