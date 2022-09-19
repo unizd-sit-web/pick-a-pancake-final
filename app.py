@@ -22,19 +22,9 @@ db = SQLAlchemy(app)
 class reservations(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     date=db.Column(db.String(10), nullable=False)
-    table_mark=db.Column(db.String(10), nullable=False)
-    name=db.Column(db.String(60), nullable=False)
-    email=db.Column(db.String(60), nullable=False)
-
-@app.route("/reservation", methods=["POST"])
-def table_reservation():
-    name=request.form.get("name")
-    surname=request.form.get("surname")
-    date=request.form.get("date")
-    table_mark=request.form.get("table_mark")
-    email_res=request.form.get("email_res")
-    unique=False
-    return render_template("reservation.html")
+    name=db.Column(db.String(50), nullable=False)
+    surname=db.Column(db.String(50), nullable=False)
+    email=db.Column(db.String(50), nullable=False)
 
 #rute
 @app.route('/')
@@ -78,7 +68,7 @@ def send_message_from_index_page():
     
 app.testing=False 
 
-@app.route('/reservedform/', methods=["POST"])
+@app.route('/reservation/', methods=["POST"])
 def reservedform():
     first_name = request.form.get("Name")
     surname = request.form.get ("Surname")
@@ -86,6 +76,8 @@ def reservedform():
     email = request.form.get("E-mail")
     return render_template ('reservedform.html')
     submit = SubmitField("submit")
+    unique=False
+    return render_template("reservedform.html")
 
 
 if __name__ == "__main__":
