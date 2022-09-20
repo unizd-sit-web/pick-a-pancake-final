@@ -25,6 +25,7 @@ class reservations(db.Model):
     name=db.Column(db.String(50), nullable=False)
     surname=db.Column(db.String(50), nullable=False)
     email=db.Column(db.String(50), nullable=False)
+    people=db.Column(db.Integer, nullable=False)
 
 #rute
 @app.route('/')
