@@ -1,11 +1,11 @@
-from email.policy import default
-from wsgiref.validate import validator
 from flask import Flask,render_template, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from email.message import Message
+import sqlite3 as sql
+
 
 
 app = Flask(__name__)
@@ -20,12 +20,20 @@ db = SQLAlchemy(app)
 
 
 class reservations(db.Model):
-    id=db.Column(db.Integer, primary_key=True)
-    date=db.Column(db.String(10), nullable=False)
-    name=db.Column(db.String(50), nullable=False)
-    surname=db.Column(db.String(50), nullable=False)
-    email=db.Column(db.String(50), nullable=False)
-    people=db.Column(db.Integer, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.LargeBinary, nullable=False)
+    name = db.Column(db.String(50), nullable=False)
+    surname = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(50), nullable=False)
+    people = db.Column(db.Integer, nullable=False)
+    
+    def __init__(self, date, name, surname, email, people):
+        self.date = date
+        self.name = name
+        self.surname = surname
+        self.email = email
+        self.people = people  
+
 
 #rute
 @app.route('/')
@@ -49,16 +57,11 @@ def reservation():
 def shop():
     return render_template('shop.html')
 
-'''@app.route('/form/', methods=["POST"])
-def form():
-    first_name = request.form.get("first_name")
-    email = request.form.get("email")
-    return render_template ('form.html')'''
 
 #slanje emaila nakon prijave na newsletter
 @app.route("/index", methods=["POST"])
 def send_message_from_index_page():
-    name = request.form.get("first_name")
+    name = request.form.get("name")
     email = request.form.get("email")
     email_name=Message("Newsletter subscription", sender=email, recipients=["babicdaria1@gmail.com"])
     email_name.body=("Thank you for subscribing to our newsletter. By subscribing, You will be receiving discount codes and updates about our special events.")
@@ -69,16 +72,15 @@ def send_message_from_index_page():
     
 app.testing=False 
 
-@app.route('/reservation/', methods=["POST"])
-def reservedform():
-    first_name = request.form.get("Name")
-    surname = request.form.get ("Surname")
-    quantitiy = request.form.get ("Number of people")
-    email = request.form.get("E-mail")
-    return render_template ('reservedform.html')
-    submit = SubmitField("submit")
-    unique=False
+@app.route('/reservation/', methods=['POST'])
+def confirm():
+    
+    res = reservation(date, name, surname, email, people)
+    db.session.add(res)
+    db.session.commit()
+    
     return render_template("reservedform.html")
+    
 
 
 if __name__ == "__main__":
