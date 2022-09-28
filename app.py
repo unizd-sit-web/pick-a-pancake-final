@@ -1,16 +1,14 @@
-from flask import Flask,render_template, request
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
-from flask_mail import Mail, Message
-from email.message import Message
 import sqlite3 as sql
-
-
+import sqlite3
 
 app = Flask(__name__)
+app.debug = True
 
-#osposobljavanje baze 
+connection=sqlite3.connect("reservation.db")
+cursor = connection.cursor()
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///reservation.db'
 #secret key
 app.config['SECRET_KEY'] = "secret key"
@@ -19,20 +17,20 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-class reservations(db.Model):
+class Reservation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.LargeBinary, nullable=False)
-    name = db.Column(db.String(50), nullable=False)
-    surname = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(50), nullable=False)
-    people = db.Column(db.Integer, nullable=False)
+    name = db.Column(db.String(30), nullable=False)
+    surname = db.Column(db.String(30), nullable=False)
+    email = db.Column(db.String(30), nullable=False)
+    quantitiy = db.Column(db.Integer, nullable=False)
+    date = db.Column(db.Date)
     
-    def __init__(self, date, name, surname, email, people):
-        self.date = date
+    def __init__(self, name, surname, email, quantity, date):
         self.name = name
         self.surname = surname
         self.email = email
-        self.people = people  
+        self.quantitiy = quantity
+        self.date = date
 
 
 #rute
@@ -57,31 +55,30 @@ def reservation():
 def shop():
     return render_template('shop.html')
 
-
-#slanje emaila nakon prijave na newsletter
-@app.route("/index", methods=["POST"])
-def send_message_from_index_page():
-    name = request.form.get("name")
+#email form
+@app.route('/form/', methods=["POST"])
+def form():
+    first_name = request.form.get("first_name")
     email = request.form.get("email")
-    email_name=Message("Newsletter subscription", sender=email, recipients=["babicdaria1@gmail.com"])
-    email_name.body=("Thank you for subscribing to our newsletter. By subscribing, You will be receiving discount codes and updates about our special events.")
-    
-    email.send(email_name)
-    success_statement="Thank you!"
-    return render_template("index.html", success_statement=success_statement)
-    
-app.testing=False 
+    return render_template ('form.html')
 
-@app.route('/reservation/', methods=['POST'])
-def confirm():
+#reservation form
+@app.route('/reservedform/', methods=["POST"])
+def reservedform():
+    name = request.form.get("name")
+    surname = request.form.get ("surname")
+    email = request.form.get ("email")
+    quantity = request.form.get("people")
+    date = request.form.get("date")
     
-    res = reservation(date, name, surname, email, people)
+    res = Reservation(name, surname, quantity, email, date)
     db.session.add(res)
     db.session.commit()
-    
-    return render_template("reservedform.html")
-    
 
+    
+    return render_template ('reservedform.html')
+
+db.create_all()
 
 if __name__ == "__main__":
     app.run(debug=True)
