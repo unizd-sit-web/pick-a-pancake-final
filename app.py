@@ -1,11 +1,35 @@
+žimport email
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 import sqlite3 as sql
 import sqlite3
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
-app.debug = True
 
+#email configuration
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = 'pickapancake1@gmail.com'
+app.config['MAIL_PASSWORD'] = 'Web@1mail'
+mail = Mail(app)
+
+#newsletter form
+@app.route('/newsletter/', methods=[ 'GET', 'POST'])
+def newsletter():
+    if request.method == 'GET':
+        return '<form action="/" method="POST"><input name="name" placeholder="Name"><input name="email" placeholder="E-mail"><input type="submit"></form>'
+    
+    email = request.form['email']
+    msg = Message('Confirm email', sender='pickapancake1@gmail.com', recipients=[email])
+    msg.body = 'You have successfully suscribed to our newsletter!'
+    mail.send(msg)
+    return render_template('newsletter.html')
+
+
+#database
 connection=sqlite3.connect("reservation.db")
 cursor = connection.cursor()
 
@@ -16,7 +40,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #initialize
 db = SQLAlchemy(app)
 
-
+#creating database
 class Reservation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
@@ -33,11 +57,11 @@ class Reservation(db.Model):
         self.date = date
 
 
-#rute
+#routes
 @app.route('/')
-@app.route("/index/")
+@app.route('/index/')
 def index():
-    return render_template("index.html")
+    return render_template('index.html')
 
 @app.route('/about/')
 def about():
@@ -54,13 +78,6 @@ def reservation():
 @app.route('/shop/')
 def shop():
     return render_template('shop.html')
-
-#email form
-@app.route('/form/', methods=["POST"])
-def form():
-    first_name = request.form.get("first_name")
-    email = request.form.get("email")
-    return render_template ('form.html')
 
 #reservation form
 @app.route('/reservedform/', methods=["POST"])
