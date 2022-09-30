@@ -1,4 +1,4 @@
-žimport email
+import email
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 import sqlite3 as sql
@@ -17,7 +17,7 @@ app.config['MAIL_PASSWORD'] = 'Web@1mail'
 mail = Mail(app)
 
 #newsletter form
-@app.route('/newsletter/', methods=[ 'GET', 'POST'])
+@app.route('/newsletter', methods=[ 'GET', 'POST'])
 def newsletter():
     if request.method == 'GET':
         return '<form action="/" method="POST"><input name="name" placeholder="Name"><input name="email" placeholder="E-mail"><input type="submit"></form>'
